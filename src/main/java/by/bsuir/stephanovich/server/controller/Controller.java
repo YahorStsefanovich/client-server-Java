@@ -2,7 +2,6 @@ package by.bsuir.stephanovich.server.controller;
 
 import by.bsuir.stephanovich.model.Student;
 import by.bsuir.stephanovich.model.XmlCollection;
-import by.bsuir.stephanovich.serializer.Serializer;
 import by.bsuir.stephanovich.server.service.ServiceFactory;
 import by.bsuir.stephanovich.server.service.StudentService;
 
@@ -16,44 +15,43 @@ public class Controller {
         studentService = ServiceFactory.getStudentService();
     }
 
-    public String performCommand(String command){
-        List<Object> list = ((XmlCollection)parseXml(command)).list;
+    public String performCommand(XmlCollection command){
         String answer = "";
-        switch ((String) list.get(0)){
+        switch ((String) command.list.get(0)){
             case "\\setname":
-                if (studentService.setStudentName((String) list.get(1),(String) list.get(2)))
+                if (studentService.setStudentName((String) command.list.get(1),(String) command.list.get(2)))
                     answer = "Операция прошла успешно";
                 else
                     answer = "Ошибка выполнения операции";
                 break;
 
             case "\\setlname":
-                if (studentService.setStudentLastName((String) list.get(1), (String) list.get(2)))
+                if (studentService.setStudentLastName((String) command.list.get(1), (String) command.list.get(2)))
                     answer = "Операция прошла успешно";
                 else
                     answer = "Ошибка выполнения операции";
                 break;
 
             case "\\setgroup":
-                if (studentService.setStudentGroup((String) list.get(1), (String) list.get(2)))
+                if (studentService.setStudentGroup((String) command.list.get(1), (String) command.list.get(2)))
                     answer = "Операция прошла успешно";
                 else
                     answer = "Ошибка выполнения операции";
                 break;
 
             case "\\setrole":
-                if (studentService.setRole((String) list.get(1), (int) list.get(2)))
+                if (studentService.setRole((String) command.list.get(1), (int) command.list.get(2)))
                     answer = "Операция прошла успешно";
                 else
                     answer = "Ошибка выполнения операции";
                 break;
 
             case "\\addst":
-                studentService.addStudent((Student) list.get(1));
+                studentService.addStudent((Student) command.list.get(1));
                 break;
 
             case "\\getst":
-                Student st = studentService.getStudent((String) list.get(1));
+                Student st = studentService.getStudent((String) command.list.get(1));
                 if (st != null)
                     answer = String.format("Фамилия: %15s, Имя: %10s, Группа: %8s, Номер зачетной книжки: %10s",
                             st.getLastName(), st.getName(), st.getGroup(), st.getId());
@@ -67,11 +65,13 @@ public class Controller {
                 answer = "Такой команды не существует";
                 break;
         }
+       // ArrayList<Object> result = new ArrayList<>();
+        //result.add(answer);
         return answer;
     }
 
-    private XmlCollection parseXml(String command){
-        Serializer serializer = new Serializer();
-        return  (XmlCollection)serializer.deserializeFromString(command);
-    }
+//    private XmlCollection parseXml(String command){
+//        Serializer serializer = new Serializer();
+//        return  (XmlCollection)serializer.deserializeFromString(command);
+//    }
 }

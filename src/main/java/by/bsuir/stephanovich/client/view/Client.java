@@ -22,24 +22,27 @@ public class Client {
         // быть уверенным, что сокет закроется:
         try (Socket socket = new Socket(addr, PORT)) {
             System.out.println("SOCKET = " + socket);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            // Вывод автоматически Output выталкивается PrintWriter'ом.
-            PrintWriter out = new PrintWriter(new BufferedWriter(
-                    new OutputStreamWriter(socket.getOutputStream())), false);
+            ObjectOutputStream  out = new ObjectOutputStream (socket.getOutputStream());
+            ObjectInputStream  in = new ObjectInputStream (socket.getInputStream());
+
+
 
             //ввод команды пользователем
             String command = waitCommand();
 
             //отперавка команды на сервер
-            out.println(controller.performCommand(command));
+            out.writeObject(controller.performCommand(command));
             out.flush();
 
             //вывод результата
-            String result = in.readLine();
-            System.out.println(result);
-            out.println("\\end");
-        } finally {
+            Object result = in.readObject();
+
+            //System.out.println(result);
+            //out.println("\\end");
+        } catch (Exception e){
+            e.printStackTrace();
+        }finally {
             System.out.println("closing...");
         }
     }

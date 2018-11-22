@@ -7,6 +7,7 @@ import by.bsuir.stephanovich.serializer.Serializer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Controller {
 
@@ -21,33 +22,33 @@ public class Controller {
         return Reader.readValue();
     }
 
-    public String performCommand(String command){
+    public XmlCollection performCommand(String command){
 
-        XmlCollection xmlCollection = new XmlCollection();
+        List<Object> list = new ArrayList<>();
         switch (command){
             case "\\setname":
-                xmlCollection.list = new ArrayList<>(Arrays.asList(
+                list = new ArrayList<>(Arrays.asList(
                         command,
                         getValue("Введите Id студента: "),
                         getValue("Введите имя студента: "))
                 );
                 break;
             case "\\setlname":
-                xmlCollection.list  = new ArrayList<>(Arrays.asList(
+                list  = new ArrayList<>(Arrays.asList(
                         command,
                         getValue("Введите Id студента: "),
                         getValue("Введите Фамилию студента: "))
                 );
                 break;
             case "\\setgroup":
-                xmlCollection.list  = new ArrayList<>(Arrays.asList(
+                list  = new ArrayList<>(Arrays.asList(
                         command,
                         getValue("Введите Id студента: "),
                         getValue("Введите Группу студента:"))
                 );
                 break;
             case "\\setrole":
-                xmlCollection.list  = new ArrayList<>(Arrays.asList(
+                list  = new ArrayList<>(Arrays.asList(
                         command,
                         getValue("Введите Id студента: "),
                         getValue("Введите роль студента: "))
@@ -61,10 +62,10 @@ public class Controller {
                         (String) getValue("Введите Номер зачетной книги студента: "),
                         0
                 );
-                xmlCollection.list  = new ArrayList<>(Arrays.asList(command, (Object)st));
+                list  = new ArrayList<>(Arrays.asList(command, (Object)st));
                 break;
             case "\\getst":
-                xmlCollection.list  = new ArrayList<>(Arrays.asList(
+                list  = new ArrayList<>(Arrays.asList(
                         command,
                         getValue("Введите Id студента: "))
                 );
@@ -72,9 +73,8 @@ public class Controller {
             default:
                 break;
         }
-        serializer.xstream.addImplicitCollection(XmlCollection.class, "list ofObjects");
-
-        String result = serializer.serializeToString(xmlCollection).replaceAll("\n", "&");
-        return result;
+        XmlCollection xmlCollection = new XmlCollection();
+        xmlCollection.list = list;
+        return xmlCollection;
     }
 }
