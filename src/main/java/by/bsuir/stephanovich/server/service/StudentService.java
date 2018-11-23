@@ -1,7 +1,7 @@
 package by.bsuir.stephanovich.server.service;
 
 import by.bsuir.stephanovich.server.dao.DaoFactory;
-import by.bsuir.stephanovich.server.dao.StudentDao;
+import by.bsuir.stephanovich.server.dao.student.StudentDao;
 import by.bsuir.stephanovich.model.Student;
 
 public class StudentService {

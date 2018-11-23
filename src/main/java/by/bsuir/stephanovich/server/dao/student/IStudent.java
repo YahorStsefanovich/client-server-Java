@@ -1,4 +1,4 @@
-package by.bsuir.stephanovich.server.dao;
+package by.bsuir.stephanovich.server.dao.student;
 
 import by.bsuir.stephanovich.model.Student;
 

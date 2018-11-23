@@ -3,7 +3,7 @@ package by.bsuir.stephanovich.client.controller;
 import by.bsuir.stephanovich.consolereader.Reader;
 import by.bsuir.stephanovich.model.Student;
 import by.bsuir.stephanovich.model.XmlCollection;
-import by.bsuir.stephanovich.serializer.Serializer;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,10 +11,10 @@ import java.util.List;
 
 public class Controller {
 
-    private Serializer serializer;
+    //private Serializer serializer;
 
     public Controller(){
-        serializer = new Serializer();
+        //serializer = new Serializer();
     }
 
     private Object getValue(String text){
@@ -69,6 +69,21 @@ public class Controller {
                         command,
                         getValue("Введите Id студента: "))
                 );
+                break;
+            case "\\login":
+                list  = new ArrayList<>(Arrays.asList(
+                        command,
+                        getValue("Введите логин: "),
+                        DigestUtils.md5Hex((String)getValue("Введите пароль: ")))
+                );
+            case "\\reg":
+                list  = new ArrayList<>(Arrays.asList(
+                        command,
+                        getValue("Введите логин: "),
+                        DigestUtils.md5Hex((String)getValue("Введите пароль: ")))
+                );
+            case "\\end":
+                //exit(0);
                 break;
             default:
                 break;

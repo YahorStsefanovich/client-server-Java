@@ -1,18 +1,18 @@
-package by.bsuir.stephanovich.server.dao;
+package by.bsuir.stephanovich.server.dao.student;
 
 import by.bsuir.stephanovich.model.Student;
 import by.bsuir.stephanovich.serializer.Serializer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDao implements IStudent {
 
     private List<Student> students;
     private Serializer serializer;
+    private final static String FILE_NAME = "data.xml";
 
     public StudentDao(){
-        serializer = new Serializer();
+        serializer = new Serializer(FILE_NAME, Student.class);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class StudentDao implements IStudent {
 
     @Override
     public boolean setName(String id, String name){
-        students = serializer.deserialize();
+        students = (List<Student>) serializer.deserialize();
         int index;
 
         if ((index = findById(id)) == -1)
@@ -41,7 +41,7 @@ public class StudentDao implements IStudent {
 
     @Override
     public boolean setLastName(String id, String lastName){
-        students = serializer.deserialize();
+        students = (List<Student>) serializer.deserialize();
         int index;
 
         if ((index = findById(id)) == -1)
@@ -56,7 +56,7 @@ public class StudentDao implements IStudent {
 
     @Override
     public boolean setGroup(String id, String group){
-        students = serializer.deserialize();
+        students = (List<Student>) serializer.deserialize();
         int index;
 
         if ((index = findById(id)) == -1)
@@ -71,7 +71,7 @@ public class StudentDao implements IStudent {
 
     @Override
     public boolean setRole(String id, int role){
-        students = serializer.deserialize();
+        students = (List<Student>) serializer.deserialize();
         int index;
 
         if ((index = findById(id)) == -1)
@@ -86,9 +86,9 @@ public class StudentDao implements IStudent {
 
     @Override
     public void addStudent(Student student){
-        students = serializer.deserialize();
+        students = (List<Student>) serializer.deserialize();
         students.add(student);
-        students = serializer.deserialize();
+        students = (List<Student>) serializer.deserialize();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class StudentDao implements IStudent {
     }
 
     private int findById(String id){
-        students = serializer.deserialize();
+        students = (List<Student>) serializer.deserialize();
         for (Student st : students){
             if (id.equals(st.getId())){
                 return students.indexOf(st);
