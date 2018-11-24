@@ -11,33 +11,41 @@ public class StudentService {
         studentDao  = DaoFactory.getStudentDao();
     }
 
-    public static void main(String ... args){
-        studentDao.addStudent(new Student("Yegor", "Stephanovich", "651006", "6510151", 1));
-        studentDao.saveChanges();
-    }
-
     public void save(){
         studentDao.saveChanges();
     }
 
     public boolean setStudentName(String id, String name){
+        if (name.equals(""))
+            return false;
         return studentDao.setName(id, name);
     }
 
     public boolean setStudentLastName(String id, String lastName){
+        if (lastName.equals(""))
+            return false;
         return studentDao.setLastName(id, lastName);
     }
 
     public boolean setStudentGroup(String id, String group){
+        if (group.length() < 6)
+            return false;
         return studentDao.setGroup(id, group);
     }
 
-    public boolean setRole(String id, int lastName){
-        return studentDao.setRole(id, lastName);
+    public boolean setRole(String id, int role){
+        if (role != 0 && role != 1)
+            return false;
+        return studentDao.setRole(id, role);
     }
 
-    public void addStudent(Student student){
-        studentDao.addStudent(student);
+    public boolean addStudent(Student student){
+        if (student.getName().equals("") ||
+            student.getLastName().equals("") ||
+            student.getGroup().equals("") ||
+            student.getId().length() < 6)
+            return false;
+        return studentDao.addStudent(student);
     }
 
     public Student getStudent(String id){

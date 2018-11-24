@@ -8,6 +8,6 @@ public interface IStudent {
     boolean setLastName(String id, String lastName);
     boolean setGroup(String id, String group);
     boolean setRole(String id, int role);
-    void addStudent(Student student);
+    boolean addStudent(Student student);
     void saveChanges();
 }

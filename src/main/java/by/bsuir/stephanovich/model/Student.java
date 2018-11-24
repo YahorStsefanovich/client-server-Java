@@ -3,8 +3,10 @@ package by.bsuir.stephanovich.model;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
+import java.io.Serializable;
+
 @XStreamAlias("Student")
-public class Student {
+public class Student implements Serializable {
 
     @XStreamAsAttribute
     @XStreamAlias("name")

@@ -31,14 +31,15 @@ class ServerOneWorker extends Thread {
             while (true) {
                 try {
                     Object command = in.readObject();
-                    String result;
-                    if (!(result = controller.performCommand((XmlCollection) command)).equals("\\end"))
-                    {
-                        out.writeObject(result);
-                        out.flush();
-                    }
-                    else
+                    XmlCollection result = controller.performCommand((XmlCollection) command);
+
+                    out.reset();
+                    out.writeObject(result);
+                    out.flush();
+
+                    if (result.list.get(0).equals("Exit")){
                         break;
+                    }
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

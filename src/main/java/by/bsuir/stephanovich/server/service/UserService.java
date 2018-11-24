@@ -16,6 +16,8 @@ public class UserService {
     }
 
     public User registrate(String login, String password, boolean isAdmin){
+        if (login.length() < 4 || password.length() < 4)
+            return null;
         return userDao.registrate(login, password, isAdmin);
     }
 }

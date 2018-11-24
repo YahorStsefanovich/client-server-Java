@@ -2,6 +2,7 @@ package by.bsuir.stephanovich.client.controller;
 
 import by.bsuir.stephanovich.consolereader.Reader;
 import by.bsuir.stephanovich.model.Student;
+import by.bsuir.stephanovich.model.User;
 import by.bsuir.stephanovich.model.XmlCollection;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -9,50 +10,104 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Controller {
+import static java.lang.System.exit;
 
-    //private Serializer serializer;
+public class Controller {
+    private static boolean isLogin;
+    private static boolean isAdmin;
+    private String name;
 
     public Controller(){
-        //serializer = new Serializer();
+        isLogin = false;
+        isAdmin = false;
     }
+
+    public String waitCommand(){
+        if (!isLogin){
+            System.out.println("\\reg - registrate");
+            System.out.println("\\login - login");
+        }
+        else{
+            System.out.println("\\getst - add Student Info");
+
+            if (isAdmin){
+                System.out.println("\\setname - set Student Name");
+                System.out.println("\\setlname - set Student Last Name");
+                System.out.println("\\setgroup - set Student Group");
+                System.out.println("\\setrole - set role");
+                System.out.println("\\addst - add Student Info");
+            }
+
+            System.out.println("\\logout - logout");
+        }
+        System.out.println("\\exit - exit program");
+
+        System.out.print("Input command: ");
+        return Reader.readValue();
+    }
+
 
     private Object getValue(String text){
         System.out.print(text);
         return Reader.readValue();
     }
 
+    public String getAnswer(XmlCollection collection){
+        switch ((String)collection.list.get(0)){
+            case "\\setname":
+                break;
+            case "\\setlname":
+                break;
+            case "\\setgroup":
+                break;
+            case "\\setrole":
+                break;
+            case "\\addst":
+                break;
+            case "\\getst":
+                break;
+            case "\\login":
+            case "\\reg":
+                User user = (User) collection.list.get(2);
+                if (user != null){
+                    isLogin = true;
+                    isAdmin = user.isAdmin();
+                    name = user.getLogin();
+                }
+                break;
+            case "\\logout":
+                isLogin = false;
+                isAdmin = false;
+                break;
+            case "\\exit":
+                exit(0);
+                break;
+            default:
+                break;
+        }
+        return (String) collection.list.get(1);
+    }
+
     public XmlCollection performCommand(String command){
 
         List<Object> list = new ArrayList<>();
+        list.add(command);
         switch (command){
             case "\\setname":
-                list = new ArrayList<>(Arrays.asList(
-                        command,
-                        getValue("Введите Id студента: "),
-                        getValue("Введите имя студента: "))
-                );
+                list.add(getValue("Введите Id студента: "));
+                list.add(getValue("Введите имя студента: "));
                 break;
             case "\\setlname":
-                list  = new ArrayList<>(Arrays.asList(
-                        command,
-                        getValue("Введите Id студента: "),
-                        getValue("Введите Фамилию студента: "))
-                );
+                list.add(getValue("Введите Id студента: "));
+                list.add(getValue("Введите Фамилию студента: "));
                 break;
             case "\\setgroup":
-                list  = new ArrayList<>(Arrays.asList(
-                        command,
-                        getValue("Введите Id студента: "),
-                        getValue("Введите Группу студента:"))
-                );
+                list.add(getValue("Введите Id студента: "));
+                list.add(getValue("Введите Группу студента: "));
                 break;
             case "\\setrole":
-                list  = new ArrayList<>(Arrays.asList(
-                        command,
-                        getValue("Введите Id студента: "),
-                        getValue("Введите роль студента: "))
-                );
+                list.add(getValue("Введите Id студента: "));
+                list.add(getValue("Введите роль студента: "));
                 break;
             case "\\addst":
                 Student st = new Student(
@@ -62,28 +117,22 @@ public class Controller {
                         (String) getValue("Введите Номер зачетной книги студента: "),
                         0
                 );
-                list  = new ArrayList<>(Arrays.asList(command, (Object)st));
+                list.add(st);
                 break;
             case "\\getst":
-                list  = new ArrayList<>(Arrays.asList(
-                        command,
-                        getValue("Введите Id студента: "))
-                );
+                list.add(getValue("Введите Id студента: "));
                 break;
             case "\\login":
-                list  = new ArrayList<>(Arrays.asList(
-                        command,
-                        getValue("Введите логин: "),
-                        DigestUtils.md5Hex((String)getValue("Введите пароль: ")))
-                );
             case "\\reg":
-                list  = new ArrayList<>(Arrays.asList(
-                        command,
-                        getValue("Введите логин: "),
-                        DigestUtils.md5Hex((String)getValue("Введите пароль: ")))
-                );
-            case "\\end":
-                //exit(0);
+                list.add(getValue("Введите логин: "));
+                list.add(DigestUtils.md5Hex((String)getValue("Введите пароль: ")));
+                break;
+            case "\\logout":
+                isLogin = false;
+                isAdmin = false;
+                break;
+            case "\\exit":
+                exit(0);
                 break;
             default:
                 break;

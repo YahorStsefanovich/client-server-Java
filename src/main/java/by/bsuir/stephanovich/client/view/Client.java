@@ -1,20 +1,19 @@
 package by.bsuir.stephanovich.client.view;
 
 import by.bsuir.stephanovich.client.controller.Controller;
-import by.bsuir.stephanovich.consolereader.Reader;
+import by.bsuir.stephanovich.model.XmlCollection;
 
-
-import java.net.*;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 
 public class Client {
 
     private static final int PORT = 8080;
-    private static boolean isLogin;
 
     public static void main(String[] args) throws IOException {
-        isLogin = false;
         InetAddress addr = InetAddress.getByName("localhost");
         Controller controller = new Controller();
 
@@ -30,16 +29,17 @@ public class Client {
 
             while (true){
                 //ввод команды пользователем
-                String command = waitCommand();
+                String command = controller.waitCommand();
 
                 //отперавка команды на сервер
+                out.reset();
                 out.writeObject(controller.performCommand(command));
                 out.flush();
 
                 //вывод результата
-                Object result = in.readObject();
+                XmlCollection result = (XmlCollection) in.readObject();
 
-                System.out.println((String) result);
+                System.out.println(controller.getAnswer(result));
             }
 
         } catch (Exception e){
@@ -47,19 +47,5 @@ public class Client {
         }finally {
             System.out.println("closing...");
         }
-    }
-
-    private static String waitCommand(){
-        System.out.println("\\setname - set Student Name");
-        System.out.println("\\setlname - set Student Last Name");
-        System.out.println("\\setgroup - set Student Group");
-        System.out.println("\\setrole - set role");
-        System.out.println("\\addst - add Student Info");
-        System.out.println("\\getst - add Student Info");
-        System.out.println("\\reg - registrate");
-        System.out.println("\\login - login");
-
-        System.out.print("Input command: ");
-        return Reader.readValue();
     }
 }

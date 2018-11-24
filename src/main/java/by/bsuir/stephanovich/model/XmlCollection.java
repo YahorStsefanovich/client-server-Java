@@ -6,13 +6,10 @@ import java.util.List;
 
 public class XmlCollection implements Serializable {
 
-    public List<Object> list;
+    public List<?> list;
 
     public XmlCollection(){
         list = new ArrayList<>();
     }
 
-    public void add(Object p){
-        list.add(p);
-    }
 }

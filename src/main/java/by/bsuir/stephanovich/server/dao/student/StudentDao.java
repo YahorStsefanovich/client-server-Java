@@ -85,10 +85,13 @@ public class StudentDao implements IStudent {
     }
 
     @Override
-    public void addStudent(Student student){
+    public boolean addStudent(Student student){
         students = (List<Student>) serializer.deserialize();
+        if(findById(student.getId()) != -1)
+            return false;
         students.add(student);
-        students = (List<Student>) serializer.deserialize();
+        serializer.serialize(students);
+        return true;
     }
 
     @Override
